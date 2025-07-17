@@ -55,13 +55,14 @@ const Section = () => {
 
       {/* Header */}
       <div className="text-center mb-12 relative z-10">
-        <h2 className="text-4xl md:text-5xl font-bold text-textmain-100 mb-4">
-          Lets Connect
-        </h2>
-        <p className="text-textmain-300 text-lg max-w-2xl mx-auto">
-          Ready to bring your ideas to life? I am here to help with your next project.
-          Let us discuss how we can work together to achieve your goals.
-        </p>
+      <h2 className="text-4xl md:text-5xl font-bold text-textmain-100 mb-4">
+  Let&apos;s Connect
+</h2>
+<p className="text-textmain-300 text-lg max-w-2xl mx-auto">
+  Ready to bring your ideas to life? I&apos;m here to help with your next project.
+  Let&apos;s discuss how we can work together to achieve your goals.
+</p>
+
       </div>
 
       <div className="grid lg:grid-cols-2 gap-12 relative z-10">
