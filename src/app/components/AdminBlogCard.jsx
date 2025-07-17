@@ -1,16 +1,17 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 
 export default function AdminBlogCard({ blog, onDelete }) {
   return (
     <div className="relative bg-[#2c2c2c] hover:bg-[#343434] transition-all duration-300 rounded-2xl shadow-lg overflow-hidden group transform hover:-translate-y-2 hover:shadow-2xl">
-      
+
       {/* Status Badge */}
       <div className="absolute top-3 left-3 z-10">
         <span className={`px-3 py-1 text-xs rounded-full font-medium shadow-lg ${
-          blog.is_published 
-            ? 'bg-green-600 text-white' 
+          blog.is_published
+            ? 'bg-green-600 text-white'
             : 'bg-yellow-600 text-white'
         }`}>
           {blog.is_published ? '✅ Published' : '⏳ Draft'}
@@ -27,11 +28,17 @@ export default function AdminBlogCard({ blog, onDelete }) {
       {/* 📸 Thumbnail */}
       {blog.thumbnail_url ? (
         <div className="relative overflow-hidden">
-          <img
-            src={blog.thumbnail_url}
-            alt={blog.title}
-            className="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500"
-          />
+       <div className="relative w-full h-48">
+  <Image
+    src={blog.thumbnail_url}
+    alt={blog.title}
+    fill
+    className="object-cover group-hover:scale-110 transition-transform duration-500"
+    sizes="(max-width: 768px) 100vw, 33vw"
+    priority={false} // Optional: Set to `true` if above the fold
+  />
+</div>
+
           <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-300"></div>
         </div>
       ) : (
@@ -61,7 +68,7 @@ export default function AdminBlogCard({ blog, onDelete }) {
           <div className="flex items-center gap-2">
             <span className="text-xs text-gray-400">📅</span>
             <span className="text-xs text-gray-300">
-              {blog.published_at 
+              {blog.published_at
                 ? new Date(blog.published_at).toLocaleDateString('en-US', {
                     year: 'numeric',
                     month: 'short',
@@ -87,24 +94,24 @@ export default function AdminBlogCard({ blog, onDelete }) {
 
         {/* Action Buttons */}
         <div className="flex flex-wrap gap-2">
-          <Link 
-            href={`/blog/${blog.slug}`} 
-            target="_blank" 
-            rel="noopener noreferrer" 
+          <Link
+            href={`/blog/${blog.slug}`}
+            target="_blank"
+            rel="noopener noreferrer"
             className="bg-green-600 hover:bg-green-700 text-white text-xs px-4 py-2 rounded-lg transition-all duration-200 flex items-center gap-2 shadow-md hover:shadow-lg transform hover:scale-105"
           >
             <span>👁️</span>
             View Live
           </Link>
-          <Link 
-            href={`/admin/blog/${blog.slug}`} 
+          <Link
+            href={`/admin/blog/${blog.slug}`}
             className="bg-blue-600 hover:bg-blue-700 text-white text-xs px-4 py-2 rounded-lg transition-all duration-200 flex items-center gap-2 shadow-md hover:shadow-lg transform hover:scale-105"
           >
             <span>✏️</span>
             Edit
           </Link>
-          <button 
-            onClick={() => onDelete(blog.id, blog.title)} 
+          <button
+            onClick={() => onDelete(blog.id, blog.title)}
             className="bg-red-600 hover:bg-red-700 text-white text-xs px-4 py-2 rounded-lg transition-all duration-200 flex items-center gap-2 shadow-md hover:shadow-lg transform hover:scale-105"
           >
             <span>🗑️</span>
@@ -114,4 +121,4 @@ export default function AdminBlogCard({ blog, onDelete }) {
       </div>
     </div>
   );
-} 
+}

@@ -50,7 +50,7 @@ export default function BlogListWithSearch({ blogs = [], isAdmin, defaultCategor
 
       return matchSearch && matchDays && matchDate && matchCategory;
     }) : [];
-  }, [searchInput, daysFilter, dateFilter, categoryFilter, filteredData]);
+  }, [searchInput, daysFilter, dateFilter, categoryFilter, filteredData,isAdmin]);
 
 
   const handleEdit = (blog) => {

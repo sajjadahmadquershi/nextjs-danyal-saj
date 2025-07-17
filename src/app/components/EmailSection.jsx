@@ -56,11 +56,11 @@ const Section = () => {
       {/* Header */}
       <div className="text-center mb-12 relative z-10">
         <h2 className="text-4xl md:text-5xl font-bold text-textmain-100 mb-4">
-          Let's Connect
+          Lets Connect
         </h2>
         <p className="text-textmain-300 text-lg max-w-2xl mx-auto">
-          Ready to bring your ideas to life? I'm here to help with your next project.
-          Let's discuss how we can work together to achieve your goals.
+          Ready to bring your ideas to life? I am here to help with your next project.
+          Let us discuss how we can work together to achieve your goals.
         </p>
       </div>
 
@@ -158,7 +158,7 @@ const Section = () => {
                 value={formData.subject}
                 onChange={handleInputChange}
                 className="w-full px-4 py-3 rounded-lg bg-white/5 backdrop-blur-sm border border-white/10 text-textmain-100 placeholder-textmain-300 focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 focus:outline-none transition-all duration-300"
-                placeholder="What's this about?"
+                placeholder="What is this about?"
               />
             </div>
 

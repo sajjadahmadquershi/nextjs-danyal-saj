@@ -4,6 +4,7 @@ import Navbar from "@/app/components/Navbar";
 import Footer from "@/app/components/Footer";
 import GlobalShareButtons from "@/app/components/GlobalShareButtons";
 import { notFound } from "next/navigation";
+import Image from "next/image"; // ⬅️ Add at the top
 
 
 export async function generateMetadata({ params }) {
@@ -68,13 +69,20 @@ export default async function BlogDetail({ params }) {
     <main className="bg-[#1e1e1e] text-white min-h-screen">
       <Navbar />
       <article className="pt-28 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        {blog.thumbnail_url && (
-          <img
-            src={blog.thumbnail_url}
-            alt={blog.title}
-            className="w-full h-auto max-h-[500px] object-cover rounded-xl shadow-lg mb-8"
-          />
-        )}
+      {blog.thumbnail_url && (
+  <div className="relative w-full max-h-[500px] mb-8 rounded-xl overflow-hidden shadow-lg">
+    <Image
+      src={blog.thumbnail_url}
+      alt={blog.title}
+      layout="responsive"
+      width={1200} // or an approximate width
+      height={500} // or an approximate height
+      objectFit="cover"
+      className="rounded-xl"
+      priority // for above-the-fold content
+    />
+  </div>
+)}
         <h1 className="text-4xl sm:text-5xl font-bold mb-4">{blog.title}</h1>
         <div className="text-gray-200 text-sm mb-6 flex flex-wrap gap-8 items-center">
           <span>✍️ {blog.author || "Sajjad"}</span>

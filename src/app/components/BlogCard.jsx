@@ -3,6 +3,7 @@
 
 import Link from "next/link";
 import GlobalShareButtons from "@/app/components/GlobalShareButtons";
+import Image from "next/image"; // at the top of the file
 
 export default function BlogCard({ blog, isAdmin = false, onEdit = () => {}, onDelete = () => {} }) {
   return (
@@ -25,11 +26,15 @@ export default function BlogCard({ blog, isAdmin = false, onEdit = () => {}, onD
       {/* 📸 Thumbnail */}
       {blog.thumbnail_url && (
         <Link href={`/blog/${blog.slug}`}>
-          <img
-            src={blog.thumbnail_url}
-            alt={blog.title}
-            className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
-          />
+        <Image
+  src={blog.thumbnail_url}
+  alt={blog.title}
+  width={800} // Adjust dimensions as needed
+  height={400}
+  className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+  style={{ objectFit: "cover" }}
+/>
+
         </Link>
       )}
 
