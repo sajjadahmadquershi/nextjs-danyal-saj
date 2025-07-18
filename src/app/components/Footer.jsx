@@ -1,9 +1,11 @@
 import React from "react";
 import GlobalShareButtons from "./GlobalShareButtons";
+import EmailSection from "./EmailSection";
 
 const Footer = () => {
   return (
     <footer className="border-t border-gray-200 bg-white">
+      <EmailSection />
       <div className="max-w-4xl mx-auto px-6 py-8">
         <div className="flex flex-col items-center space-y-6">
           {/* Name */}
