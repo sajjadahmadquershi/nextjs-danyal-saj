@@ -223,6 +223,14 @@ const HeroSection = ({ heroImage, heroText, type }) => {
 
         /* Responsive adjustments */
         @media (max-width: 640px) {
+          .hero-background {
+            width: 100vw;
+            margin-left: calc(50% - 50vw);
+            margin-right: calc(50% - 50vw);
+            left: 0;
+            right: 0;
+          }
+
           .floating-orb:nth-child(1) {
             width: 120px;
             height: 120px;
@@ -234,13 +242,6 @@ const HeroSection = ({ heroImage, heroText, type }) => {
           .floating-orb:nth-child(3) {
             width: 80px;
             height: 80px;
-          }
-
-          /* Ensure full width on mobile */
-          .hero-background {
-            margin: 0;
-            padding-left: 0;
-            padding-right: 0;
           }
 
           .mobile-content {
