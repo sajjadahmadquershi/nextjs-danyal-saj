@@ -1,5 +1,6 @@
 import { createSupabaseServerClient } from "@/lib/supaclintnewforpubblog";
 import HeroSection from "./components/HeroSection";
+import AboutSection from "./components/AboutSection";
 import Navbar from "./components/Navbar";
 import ProjectsSectionClient from "./components/ProjectsSectionClient";
 import Footer from "./components/Footer";
@@ -65,6 +66,7 @@ export default async function Home() {
       .select("main_image_url , about-us-video-2d");
 
     const heroImage = siteContent?.[0]?.main_image_url || "/images/hero-image.png";
+    const aboutVideo = siteContent?.[0]?.["about-us-video-2d"];
     const heroText = "Transforming ideas into stunning 2D and 3D CNC designs. Precision, creativity, and craftsmanship in every project.";
     const type = "2d-3d";
 
@@ -89,7 +91,7 @@ export default async function Home() {
         <Navbar />
         <div className="container mt-24 mx-auto px-12 py-4">
           <HeroSection heroImage={heroImage} heroText={heroText} type={type} />
-          
+          <AboutSection aboutvideo={aboutVideo} />
           {/* Recent Posts Section with Projects */}
           <section className="mt-12">
             <h2 className="text-center text-4xl font-bold text-textmain-100 mt-4 mb-8">
