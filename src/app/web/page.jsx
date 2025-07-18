@@ -4,6 +4,7 @@ import HeroSection from "@/app/components/HeroSection";
 import Navbar from "@/app/components/Navbar";
 import BlogListWithSearch from "@/app/components/BlogListWithSearch";
 import Footer from "@/app/components/Footer";
+export const dynamic = 'force-dynamic';
 
 export const metadata = {
   metadataBase: new URL("https://unisol-sajjad.vercel.app"), // 🔁 Update this to your actual domain
@@ -27,7 +28,7 @@ export const metadata = {
     siteName: "Sajjad Web Portfolio",
     images: [
       {
-        url: "/images/cnc-laser-2d-design.png", 
+        url: "/images/cnc-laser-2d-design.png",
         width: 1200,
         height: 630,
         alt: "Hero image of CNC design work",
@@ -42,7 +43,7 @@ export const metadata = {
     title: "Sajjad's Website Design Services",
     description: "Explore high-quality website design services for modern and responsive web applications.",
     creator: "@sajjad_cnc", // 🔁 optional
-    images: ["/images/cnc-laser-2d-design.png"], 
+    images: ["/images/cnc-laser-2d-design.png"],
   },
 
   icons: {
@@ -51,7 +52,7 @@ export const metadata = {
     apple: "/sajjad-2d-3d-cnc-dxf-svg.svg",
   },
 
- 
+
 
   category: "technology",
 };
@@ -62,13 +63,13 @@ export const revalidate = 10;
 export default async function WebPortfolioPage() {
   try {
     const supabase = await createSupabaseServerClient();
-    
+
     // Check if supabase client is properly initialized
     if (!supabase || typeof supabase.from !== 'function') {
       console.error('Supabase client is not properly initialized');
       return <div>Error: Database connection failed</div>;
     }
-    
+
     const category = "web";
     const { data: siteContent } = await supabase
   .from("site_content")

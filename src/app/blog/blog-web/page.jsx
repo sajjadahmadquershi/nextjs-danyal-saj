@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 import Navbar from "@/app/components/Navbar";
 import Footer from "@/app/components/Footer";
 import BlogListWithSearch from "@/app/components/BlogListWithSearch";
@@ -16,7 +18,7 @@ export const metadata = {
     "Explore web development tips, AI tools, modern frameworks, and practical guides by Sajjad. Stay sharp in the digital world.",
   keywords: [
     "Web development",
-    "AI tools", 
+    "AI tools",
     "Next.js",
     "frontend development",
     "JavaScript",
@@ -49,7 +51,7 @@ export const metadata = {
 
   twitter: {
     card: "summary_large_image",
-    title: "Sajjad's Web Development Blog", 
+    title: "Sajjad's Web Development Blog",
     description:
       "Tips and tutorials on frontend dev, AI, and smart tools by Sajjad.",
     creator: "@sajjad_cnc",
