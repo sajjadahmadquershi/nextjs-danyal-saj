@@ -33,7 +33,7 @@ const AdminPortfolio = () => {
   const [tags, setTags] = useState(["All"]);
   const [siteContent, setSiteContent] = useState([]);
   const [activeTab, setActiveTab] = useState("projects"); // Add tab state
-  const [blogTagFilter, setBlogTagFilter] = useState("all");
+  const [blogSearchInput, setBlogSearchInput] = useState("");
 
   const ref = useRef(null);
   const cardVariants = {
@@ -106,20 +106,18 @@ const AdminPortfolio = () => {
       ? projects.filter((project) => project.tag?.includes(selectedTag))
       : projects;
 
-  const blogTags = useMemo(() => {
-    const tags = new Set();
-    blogs.forEach(blog => {
-      blog.tags?.forEach(tag => tags.add(tag));
-    });
-    return ["all", ...Array.from(tags)];
-  }, [blogs]);
-
   const filteredBlogs = useMemo(() => {
+    if (!blogSearchInput) {
+      return blogs;
+    }
     return blogs.filter(blog => {
-      if (blogTagFilter === "all") return true;
-      return Array.isArray(blog.tags) && blog.tags.includes(blogTagFilter);
+      const searchTerm = blogSearchInput.toLowerCase();
+      const titleMatch = blog.title?.toLowerCase().includes(searchTerm);
+      const excerptMatch = blog.excerpt?.toLowerCase().includes(searchTerm);
+      const tagMatch = Array.isArray(blog.tags) && blog.tags.some(tag => tag.toLowerCase().includes(searchTerm));
+      return titleMatch || excerptMatch || tagMatch;
     });
-  }, [blogs, blogTagFilter]);
+  }, [blogs, blogSearchInput]);
 
   const compressAndResizeImage = async (file) => {
     const options = {
@@ -701,19 +699,15 @@ const AdminPortfolio = () => {
             </div>
           )}
 
-          {/* Blog Filter */}
+          {/* Blog Search */}
           <div className="my-4">
-            <label htmlFor="blog-tag-filter" className="mr-2">Filter by tag:</label>
-            <select
-              id="blog-tag-filter"
-              value={blogTagFilter}
-              onChange={(e) => setBlogTagFilter(e.target.value)}
-              className="p-2 rounded bg-[#2c2c2c] text-white border border-gray-600"
-            >
-              {blogTags.map(tag => (
-                <option key={tag} value={tag}>{tag === 'all' ? 'All Tags' : tag}</option>
-              ))}
-            </select>
+            <input
+              type="text"
+              placeholder="Search blogs..."
+              value={blogSearchInput}
+              onChange={(e) => setBlogSearchInput(e.target.value)}
+              className="p-2 rounded bg-[#2c2c2c] text-white border border-gray-600 w-full"
+            />
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6" style={{ opacity: 1 }}>
