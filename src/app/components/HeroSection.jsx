@@ -220,9 +220,25 @@ const HeroSection = ({ heroImage, heroText, type }) => {
           0% { transform: translate(0, 0); }
           100% { transform: translate(50px, 50px); }
         }
+
+        /* Responsive adjustments */
+        @media (max-width: 640px) {
+          .floating-orb:nth-child(1) {
+            width: 120px;
+            height: 120px;
+          }
+          .floating-orb:nth-child(2) {
+            width: 100px;
+            height: 100px;
+          }
+          .floating-orb:nth-child(3) {
+            width: 80px;
+            height: 80px;
+          }
+        }
       `}</style>
 
-      <section className="hero-background w-full lg:py-16 relative overflow-hidden min-h-screen flex items-center">
+      <section className="hero-background w-full py-8 sm:py-12 lg:py-16 relative overflow-hidden min-h-screen flex items-center">
         {/* Subtle grid pattern */}
         <div className="grid-pattern"></div>
 
@@ -237,16 +253,16 @@ const HeroSection = ({ heroImage, heroText, type }) => {
         <div className="decorative-dots"></div>
         <div className="decorative-dots"></div>
 
-        <div className="container mx-auto px-4 relative z-10">
-          <div className="grid grid-cols-1 md:grid-cols-12 w-full gap-8 items-center">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="grid grid-cols-1 lg:grid-cols-12 w-full gap-6 sm:gap-8 lg:gap-12 items-center">
             <motion.div
               initial={{ opacity: 0, scale: 0.5 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.5 }}
-              className="col-span-12 md:col-span-7 w-full text-center md:text-left"
+              className="col-span-1 lg:col-span-7 w-full text-center lg:text-left order-2 lg:order-1"
             >
               {type === "web" ? (
-                <h1 className="mb-6 text-4xl sm:text-5xl lg:text-7xl lg:leading-normal font-extrabold">
+                <h1 className="mb-4 sm:mb-6 text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl leading-tight lg:leading-normal font-extrabold">
                   <motion.span
                     className="gradient-text drop-shadow-lg"
                     initial={{ y: -20, opacity: 0 }}
@@ -283,7 +299,7 @@ const HeroSection = ({ heroImage, heroText, type }) => {
                   </motion.div>
                 </h1>
               ) : (
-                <h1 className="mb-6 text-4xl sm:text-4xl md:text-4xl lg:text-7xl lg:leading-normal font-extrabold">
+                <h1 className="mb-4 sm:mb-6 text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl leading-tight lg:leading-normal font-extrabold">
                   <motion.span
                     className="gradient-text drop-shadow-lg"
                     initial={{ y: -20, opacity: 0 }}
@@ -320,7 +336,7 @@ const HeroSection = ({ heroImage, heroText, type }) => {
               )}
 
               <motion.p
-                className="text-description text-base sm:text-lg mb-8 lg:text-xl max-w-full sm:max-w-[90%] md:max-w-[80%] lg:max-w-[700px] leading-relaxed"
+                className="text-description text-sm sm:text-base lg:text-lg xl:text-xl mb-6 sm:mb-8 max-w-full leading-relaxed mx-auto lg:mx-0"
                 initial={{ y: 20, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ duration: 0.8, delay: 0.6 }}
@@ -329,7 +345,7 @@ const HeroSection = ({ heroImage, heroText, type }) => {
               </motion.p>
 
               <motion.div
-                className="flex flex-col sm:flex-row gap-6 justify-center md:justify-start"
+                className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center lg:justify-start items-center sm:items-stretch"
                 initial={{ y: 30, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ duration: 0.8, delay: 0.8 }}
@@ -337,34 +353,32 @@ const HeroSection = ({ heroImage, heroText, type }) => {
                 <Link
                   href="https://wa.me/message/FYPCUDSRLRNFG1"
                   aria-label="WhatsApp profile"
-                  className="professional-button whatsapp-button group px-8 py-4 rounded-xl flex items-center justify-center gap-3 text-white font-semibold text-lg min-w-[200px]"
+                  className="professional-button whatsapp-button group px-4 sm:px-6 lg:px-8 py-3 sm:py-4 rounded-xl flex items-center justify-center gap-2 sm:gap-3 text-white font-semibold text-sm sm:text-base lg:text-lg w-full sm:w-auto sm:min-w-[180px] lg:min-w-[200px]"
                 >
-                  <div className=" flex border bg-white border-white p-4 rounded-full  hover:bg-gray-400">
-                  <button className="relative z-10 flex items-center gap-2">
-                    <span>Hire on WhatsApp</span>
-                    <FontAwesomeIcon icon={faWhatsapp} size="xl" style={{color: "#63E6BE"}} />
-                  </button>
+                  <div className="flex border bg-white border-white p-2 sm:p-3 lg:p-4 rounded-full hover:bg-gray-400 transition-colors">
+                    <button className="relative z-10 flex items-center gap-1 sm:gap-2">
+                      <span className="text-xs sm:text-sm lg:text-base">Hire on WhatsApp</span>
+                      <FontAwesomeIcon icon={faWhatsapp} className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6" style={{color: "#63E6BE"}} />
+                    </button>
                   </div>
                 </Link>
 
                 <Link
                   href="https://www.fiverr.com/s/K2BYm2"
                   aria-label="Fiverr profile"
-                  className="professional-button fiverr-button group px-8 py-4 rounded-xl flex items-center justify-center gap-3 text-white font-semibold text-lg min-w-[200px]"
+                  className="professional-button fiverr-button group px-4 sm:px-6 lg:px-8 py-3 sm:py-4 rounded-xl flex items-center justify-center gap-2 sm:gap-3 text-white font-semibold text-sm sm:text-base lg:text-lg w-full sm:w-auto sm:min-w-[180px] lg:min-w-[200px]"
                 >
-                  <div className=" flex border bg-transparent border-white p-4 px-4 m-4 rounded-full hover:bg-black">
-
-                  <span className="relative z-10">Hire on Fiverr</span>
-
-                  <Image
-                    className="button-icon w-6 h-6 relative z-10"
-                    loading="lazy"
-                    src={fiver || "/placeholder.svg?height=24&width=24"}
-                    alt="Fiverr Icon"
-                    width={24}
-                    height={24}
-                  />
-                   </div>
+                  <div className="flex border bg-transparent border-white p-2 sm:p-3 lg:p-4 rounded-full hover:bg-black transition-colors">
+                    <span className="relative z-10 text-xs sm:text-sm lg:text-base">Hire on Fiverr</span>
+                    <Image
+                      className="button-icon w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6 relative z-10 ml-1 sm:ml-2"
+                      loading="lazy"
+                      src={fiver || "/placeholder.svg?height=24&width=24"}
+                      alt="Fiverr Icon"
+                      width={24}
+                      height={24}
+                    />
+                  </div>
                 </Link>
               </motion.div>
             </motion.div>
@@ -373,7 +387,7 @@ const HeroSection = ({ heroImage, heroText, type }) => {
               initial={{ opacity: 0, scale: 0.5 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.5 }}
-              className="col-span-12 md:col-span-5 place-self-center mt-8 md:mt-0 relative"
+              className="col-span-1 lg:col-span-5 place-self-center mt-4 sm:mt-6 lg:mt-0 relative order-1 lg:order-2 w-full max-w-md sm:max-w-lg lg:max-w-none mx-auto"
             >
               <div className="relative">
                 {/* Professional glow effect */}
