@@ -236,10 +236,16 @@ const HeroSection = ({ heroImage, heroText, type }) => {
             height: 80px;
           }
 
-          /* Mobile full width container */
-          .mobile-full-width {
-            padding-left: 16px;
-            padding-right: 16px;
+          /* Ensure full width on mobile */
+          .hero-background {
+            margin: 0;
+            padding-left: 0;
+            padding-right: 0;
+          }
+
+          .mobile-content {
+            padding-left: 8px;
+            padding-right: 8px;
           }
         }
       `}</style>
@@ -259,8 +265,8 @@ const HeroSection = ({ heroImage, heroText, type }) => {
         <div className="decorative-dots"></div>
         <div className="decorative-dots"></div>
 
-        <div className="w-full mx-auto px-4 sm:px-6 lg:px-8 mobile-full-width relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-12 w-full gap-6 sm:gap-8 lg:gap-12 items-center">
+        <div className="w-full mx-auto px-2 sm:px-6 lg:px-8 relative z-10">
+          <div className="grid grid-cols-1 lg:grid-cols-12 w-full gap-4 sm:gap-8 lg:gap-12 items-center mobile-content">
             <motion.div
               initial={{ opacity: 0, scale: 0.5 }}
               animate={{ opacity: 1, scale: 1 }}
