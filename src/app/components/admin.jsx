@@ -389,7 +389,19 @@ const AdminPortfolio = () => {
     setBlogs(blogs.filter(blog => blog.id !== blogId));
   };
 
+  const handlePublishToggle = async (blogId, currentState) => {
+    const { error } = await supabase
+      .from('blogs')
+      .update({ is_published: !currentState })
+      .eq('id', blogId);
 
+    if (error) {
+      alert('Error updating status: ' + error.message);
+    } else {
+      alert('Status updated successfully!');
+      await fetchData(); // Re-fetch to update UI
+    }
+  };
 
   return (
     <div className="admin-portfolio dark-mode" style={{ opacity: 1 }}>
@@ -664,21 +676,6 @@ const AdminPortfolio = () => {
             </Link>
           </div>
 
-          {/* Blog Filter */}
-          <div className="my-4">
-            <label htmlFor="blog-tag-filter" className="mr-2">Filter by tag:</label>
-            <select
-              id="blog-tag-filter"
-              value={blogTagFilter}
-              onChange={(e) => setBlogTagFilter(e.target.value)}
-              className="p-2 rounded bg-[#2c2c2c] text-white border border-gray-600"
-            >
-              {blogTags.map(tag => (
-                <option key={tag} value={tag}>{tag === 'all' ? 'All Tags' : tag}</option>
-              ))}
-            </select>
-          </div>
-
           {/* Blog Statistics */}
           {!loading && blogs.length > 0 && (
             <div className="bg-[#2c2c2c] rounded-lg p-4 mb-6">
@@ -704,6 +701,21 @@ const AdminPortfolio = () => {
             </div>
           )}
 
+          {/* Blog Filter */}
+          <div className="my-4">
+            <label htmlFor="blog-tag-filter" className="mr-2">Filter by tag:</label>
+            <select
+              id="blog-tag-filter"
+              value={blogTagFilter}
+              onChange={(e) => setBlogTagFilter(e.target.value)}
+              className="p-2 rounded bg-[#2c2c2c] text-white border border-gray-600"
+            >
+              {blogTags.map(tag => (
+                <option key={tag} value={tag}>{tag === 'all' ? 'All Tags' : tag}</option>
+              ))}
+            </select>
+          </div>
+
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6" style={{ opacity: 1 }}>
             {loading ? (
               <div className="col-span-full flex justify-center items-center py-12">
@@ -718,6 +730,7 @@ const AdminPortfolio = () => {
                   key={blog.id}
                   blog={blog}
                   onDelete={handleDeleteBlog}
+                  onPublishToggle={handlePublishToggle}
                 />
               ))
             ) : (
