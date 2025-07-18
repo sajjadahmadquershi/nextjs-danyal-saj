@@ -2,8 +2,9 @@
 import { createSupabaseServerClient } from "@/lib/supaclintnewforpubblog";
 import HeroSection from "@/app/components/HeroSection";
 import Navbar from "@/app/components/Navbar";
-import BlogListWithSearch from "@/app/components/BlogListWithSearch";
+import ProjectsSectionClient from "@/app/components/ProjectsSectionClient";
 import Footer from "@/app/components/Footer";
+import AboutSection from "@/app/components/AboutSection";
 export const dynamic = 'force-dynamic';
 
 export const metadata = {
@@ -76,31 +77,43 @@ export default async function WebPortfolioPage() {
   .select("main_image_url , about-us-video-web");
 
 const heroImage = siteContent?.[0]?.main_image_url || "/images/hero-image.png";
+const aboutVideo = siteContent?.[0]?.["about-us-video-web"];
 const heroText =  "Crafting digital experiences that connect, engage, and inspire. From clean code to captivating design — let’s build your online presence together!"
 const type = "web";
 
-    // ✅ Fetch ALL published blogs (like other blog pages)
-    const { data: blogs = [], error: blogsError } = await supabase
-      .from("blogs")
-      .select("id, title, slug, excerpt, thumbnail_url, published_at, tags, category")
-      .eq("is_published", true)
-      .order("published_at", { ascending: false });
+    // ✅ Fetch 'web' projects from portfolio_items table
+    const { data: projects = [], error: projectsError } = await supabase
+      .from("portfolio_items")
+      .select("id, title, category, tag, image_url, web_link, display_order, created_at")
+      .eq('category', 'web')
+      .order("display_order", { ascending: false })
+      .order("created_at", { ascending: false });
 
-    if (blogsError) {
-      console.error("Error fetching blogs:", blogsError);
-      return <div className="text-center text-textmain-100">Error loading blogs. Please try again later.</div>;
+    if (projectsError) {
+      console.error("Error fetching projects:", projectsError);
+      return <div className="text-center text-textmain-100">Error loading projects. Please try again later.</div>;
     }
+
+    // Generate tags from projects
+    const allTags = projects ? projects.flatMap((item) => item.tag || []) : [];
+    const tags = ["All", ...new Set(allTags)];
 
     return (
       <main className="flex min-h-screen flex-col bg-[#1e1e1e]">
         <Navbar />
         <div className="container mt-24 mx-auto px-12 py-4">
           <HeroSection heroImage={heroImage} heroText={heroText} type={type} />
-          <BlogListWithSearch
-            blogs={blogs}
-            isAdmin={false}
-            defaultCategoryFilter="webdev"
-          />
+          <AboutSection aboutvideo={aboutVideo} />
+          <section className="mt-12">
+            <h2 className="text-center text-4xl font-bold text-textmain-100 mt-4 mb-8">
+              My Work
+            </h2>
+            <ProjectsSectionClient
+              initialProjects={projects}
+              initialTags={tags}
+              category={category}
+            />
+          </section>
         </div>
         <Footer />
       </main>
