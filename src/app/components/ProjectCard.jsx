@@ -103,38 +103,58 @@ const ProjectCard = ({ image_url, title, gitUrl, previewUrl }) => {
 
       </div>
       {showModal && (
-        <div className="fixed z-10 inset-0 overflow-y-auto">
-          <div className="flex items-center justify-center min-h-screen">
-            <div className="fixed inset-0 bg-black opacity-50"></div>
-            <div className="relative z-20 bg-white p-4 sm:p-6 md:p-8 rounded-xl w-[90vw] max-w-[800px] h-auto">
-              <button
-                className="absolute z-50 top-1 right-1 text-black cursor-pointer border border-gray-300 rounded-full bg-white bg-opacity-80 p-1 text-sm"
-                onClick={closeModal}
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70 p-4"
+          onClick={closeModal}
+        >
+          <div
+            className="relative w-full max-w-4xl max-h-[90vh] bg-white rounded-lg shadow-xl overflow-hidden"
+            onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside
+          >
+            {/* Close Button */}
+            <button
+              onClick={closeModal}
+              className="absolute top-3 right-3 z-50 p-2 text-white bg-black bg-opacity-40 rounded-full hover:bg-opacity-60 transition-opacity"
+              aria-label="Close"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
               >
-                X
-              </button>
-              <div className="w-full max-w-[90vw] max-h-[80vh] flex items-center justify-center">
-                {isVideo(image_url) ? (
-                  <video
-                    src={image_url}
-                    controls
-                    className="max-w-full max-h-[80vh] object-contain rounded-xl"
-                  />
-                ) : (
-                  <ImageWithLoader
-                    src={image_url}
-                    alt={`Visual representation of ${title} project from CNC portfolio`}
-                    width={1000} // just reference, original image size
-                    height={700}
-                    className="max-w-full max-h-[80vh] object-contain rounded-xl"
-                    loading="lazy"
-                  />
-                )}
-              </div>
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            </button>
+
+            {/* Modal Content */}
+            <div className="w-full h-full flex items-center justify-center">
+              {isVideo(image_url) ? (
+                <video
+                  src={image_url}
+                  controls
+                  autoPlay
+                  className="max-w-full max-h-[90vh] object-contain"
+                />
+              ) : (
+                <ImageWithLoader
+                  src={image_url}
+                  alt={`Visual representation of ${title} project from CNC portfolio`}
+                  width={1200} // Increased for better resolution
+                  height={800}
+                  className="max-w-full max-h-[90vh] object-contain"
+                  loading="lazy"
+                />
+              )}
             </div>
           </div>
         </div>
-
       )}
     </div>
   );
