@@ -10,12 +10,21 @@ export default function BlogListWithSearch({ blogs = [], isAdmin, defaultCategor
   const [daysFilter, setDaysFilter] = useState("all");
   const [dateFilter, setDateFilter] = useState("");
   const [categoryFilter, setCategoryFilter] = useState(defaultCategoryFilter); // ✅ Use default category
+  const [tagFilter, setTagFilter] = useState("all");
   const [filteredData, setFilteredData] = useState(blogs);
   const [currentPage, setCurrentPage] = useState(1);
   const [postsPerPage] = useState(9); // 9 posts per page to match the 3-column grid
 
   const supabase = createClientComponentClient();
   const router = useRouter();
+
+  const allTags = useMemo(() => {
+    const tags = new Set();
+    blogs.forEach(blog => {
+      blog.tags?.forEach(tag => tags.add(tag));
+    });
+    return ["all", ...Array.from(tags)];
+  }, [blogs]);
 
   const filteredBlogs = useMemo(() => {
     const today = new Date();
@@ -49,9 +58,14 @@ export default function BlogListWithSearch({ blogs = [], isAdmin, defaultCategor
       const matchCategory =
         categoryFilter === "all" ? true : blog.category === categoryFilter;
 
-      return matchSearch && matchDays && matchDate && matchCategory;
+      const matchTag =
+        tagFilter === "all"
+          ? true
+          : Array.isArray(blog.tags) && blog.tags.includes(tagFilter);
+
+      return matchSearch && matchDays && matchDate && matchCategory && matchTag;
     }) : [];
-  }, [searchInput, daysFilter, dateFilter, categoryFilter, filteredData,isAdmin]);
+  }, [searchInput, daysFilter, dateFilter, categoryFilter, tagFilter, filteredData, isAdmin]);
 
   // Pagination logic
   const totalPages = Math.ceil(filteredBlogs.length / postsPerPage);
@@ -211,6 +225,17 @@ export default function BlogListWithSearch({ blogs = [], isAdmin, defaultCategor
           onChange={(e) => handleFilterChange(setDateFilter)(e.target.value)}
           className="p-2 rounded bg-[#2c2c2c] text-white border border-gray-600"
         />
+
+        {/* Tag Filter */}
+        <select
+          value={tagFilter}
+          onChange={(e) => handleFilterChange(setTagFilter)(e.target.value)}
+          className="p-2 rounded bg-[#2c2c2c] text-white border border-gray-600"
+        >
+          {allTags.map(tag => (
+            <option key={tag} value={tag}>{tag === 'all' ? 'All Tags' : tag}</option>
+          ))}
+        </select>
 
         {/* ✅ Category Filter: Show for Admin OR when defaultCategory is set */}
         {(isAdmin || defaultCategoryFilter !== "all") && (
