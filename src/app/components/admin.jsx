@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useMemo } from "react";
 import ProjectCard from "@/app/components/ProjectCard";
 import AdminBlogCard from "@/app/components/AdminBlogCard";
 import { motion } from "framer-motion";
@@ -33,6 +33,8 @@ const AdminPortfolio = () => {
   const [tags, setTags] = useState(["All"]);
   const [siteContent, setSiteContent] = useState([]);
   const [activeTab, setActiveTab] = useState("projects"); // Add tab state
+  const [blogTagFilter, setBlogTagFilter] = useState("all");
+
   const ref = useRef(null);
   const cardVariants = {
     initial: { opacity: 0, y: 20 },
@@ -103,6 +105,21 @@ const AdminPortfolio = () => {
     selectedTag && selectedTag !== "All"
       ? projects.filter((project) => project.tag?.includes(selectedTag))
       : projects;
+
+  const blogTags = useMemo(() => {
+    const tags = new Set();
+    blogs.forEach(blog => {
+      blog.tags?.forEach(tag => tags.add(tag));
+    });
+    return ["all", ...Array.from(tags)];
+  }, [blogs]);
+
+  const filteredBlogs = useMemo(() => {
+    return blogs.filter(blog => {
+      if (blogTagFilter === "all") return true;
+      return Array.isArray(blog.tags) && blog.tags.includes(blogTagFilter);
+    });
+  }, [blogs, blogTagFilter]);
 
   const compressAndResizeImage = async (file) => {
     const options = {
@@ -361,18 +378,18 @@ const AdminPortfolio = () => {
   // Add blog delete function
   const handleDeleteBlog = async (blogId, blogTitle) => {
     if (!confirm(`Are you sure you want to delete "${blogTitle}"?`)) return;
-    
+
     const { error } = await supabase.from("blogs").delete().eq("id", blogId);
     if (error) {
       alert("Error deleting blog: " + error.message);
       return;
     }
-    
+
     alert("Blog deleted successfully!");
     setBlogs(blogs.filter(blog => blog.id !== blogId));
   };
 
- 
+
 
   return (
     <div className="admin-portfolio dark-mode" style={{ opacity: 1 }}>
@@ -383,13 +400,13 @@ const AdminPortfolio = () => {
 
       {/* Tab Navigation */}
       <div className="flex space-x-4 mb-6">
-        <button 
+        <button
           onClick={() => setActiveTab("projects")}
           className={`px-4 py-2 rounded ${activeTab === "projects" ? "bg-blue-600 text-white" : "bg-gray-700 text-gray-300"}`}
         >
           Manage Projects
         </button>
-        <button 
+        <button
           onClick={() => setActiveTab("blogs")}
           className={`px-4 py-2 rounded ${activeTab === "blogs" ? "bg-blue-600 text-white" : "bg-gray-700 text-gray-300"}`}
         >
@@ -646,7 +663,22 @@ const AdminPortfolio = () => {
               ➕ Add New Blog
             </Link>
           </div>
-          
+
+          {/* Blog Filter */}
+          <div className="my-4">
+            <label htmlFor="blog-tag-filter" className="mr-2">Filter by tag:</label>
+            <select
+              id="blog-tag-filter"
+              value={blogTagFilter}
+              onChange={(e) => setBlogTagFilter(e.target.value)}
+              className="p-2 rounded bg-[#2c2c2c] text-white border border-gray-600"
+            >
+              {blogTags.map(tag => (
+                <option key={tag} value={tag}>{tag === 'all' ? 'All Tags' : tag}</option>
+              ))}
+            </select>
+          </div>
+
           {/* Blog Statistics */}
           {!loading && blogs.length > 0 && (
             <div className="bg-[#2c2c2c] rounded-lg p-4 mb-6">
@@ -680,8 +712,8 @@ const AdminPortfolio = () => {
                   <p className="text-textmain-100">Loading blogs...</p>
                 </div>
               </div>
-            ) : blogs.length > 0 ? (
-              blogs.map((blog) => (
+            ) : filteredBlogs.length > 0 ? (
+              filteredBlogs.map((blog) => (
                 <AdminBlogCard
                   key={blog.id}
                   blog={blog}
