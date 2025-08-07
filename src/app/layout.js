@@ -32,7 +32,7 @@ export default function RootLayout({ children }) {
             `,
           }}
         />
-
+<meta name="google-site-verification" content="XJP44XTs6xw1zsn_--eV5LX4ogJhEAZstOF8Nm4EXZk" />
         {/* ✅ Schema.org JSON-LD Structured Data */}
         <Script
           id="schema-org"
