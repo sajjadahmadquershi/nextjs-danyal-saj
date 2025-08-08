@@ -25,7 +25,8 @@ module.exports = {
       path.includes('/[slug]') ||
       path.includes('/[id]') ||
       path.startsWith('/admin') ||
-      path.startsWith('/blog/add')
+      path.startsWith('/blog/add') ||
+      path.startsWith('/login')
     ) {
       return null;
     }
