@@ -92,25 +92,58 @@ module.exports = {
 
     }
 
-    const sitemapEntries = [
-      ...staticPages.map(({ path, priority }) => ({
-        loc: `${config.siteUrl}${path}`,
-        changefreq: 'weekly',
-        priority,
-        lastmod: new Date().toISOString().replace(/\.\d+Z$/, 'Z'),
-      })),
-      ...blogPaths.map((blog) => {
-        const entry = {
-          loc: `${config.siteUrl}/blog/${blog.slug}`,
-          changefreq: 'monthly',
-          priority: 0.9,
-  lastmod: blog.updated_at
-  ? new Date(blog.updated_at).toISOString().replace(/\.\d+Z$/, 'Z')
-  : new Date().toISOString().replace(/\.\d+Z$/, 'Z')
-        };
-        return entry;
-      }),
-    ];
+  //   const sitemapEntries = [
+  //     ...staticPages.map(({ path, priority }) => ({
+  //       loc: `${config.siteUrl}${path}`,
+  //       changefreq: 'weekly',
+  //       priority,
+  //       lastmod: new Date().toISOString().replace(/\.\d+Z$/, 'Z'),
+  //     })),
+  //     ...blogPaths.map((blog) => {
+  //       const entry = {
+  //         loc: `${config.siteUrl}/blog/${blog.slug}`,
+  //         changefreq: 'monthly',
+  //         priority: 0.9,
+  // lastmod: blog.updated_at
+  // ? new Date(blog.updated_at).toISOString().replace(/\.\d+Z$/, 'Z')
+  // : new Date().toISOString().replace(/\.\d+Z$/, 'Z')
+  //       };
+  //       return entry;
+  //     }),
+  //   ];
+  // ...inside your additionalPaths function
+const sitemapEntries = [
+  ...staticPages.map(({ path, priority }) => ({
+    loc: `${config.siteUrl}${path}`,
+    changefreq: 'weekly',
+    priority,
+    lastmod: new Date().toISOString(),
+  })),
+  ...blogPaths.map((blog) => {
+    let lastmodDate;
+    try {
+      // Attempt to create a date from the database value
+      const dateFromDb = new Date(blog.updated_at);
+      // Check if the date is valid before formatting
+      if (!isNaN(dateFromDb.getTime())) {
+        lastmodDate = dateFromDb.toISOString();
+      } else {
+        // Fallback to the current date if the database date is invalid
+        lastmodDate = new Date().toISOString();
+      }
+    } catch (error) {
+      // In case of a parsing error, also fallback
+      lastmodDate = new Date().toISOString();
+    }
+
+    return {
+      loc: `${config.siteUrl}/blog/${blog.slug}`,
+      changefreq: 'monthly',
+      priority: 0.9,
+      lastmod: lastmodDate,
+    };
+  }),
+];
 
     //console.log('📋 Final Sitemap Entries:', JSON.stringify(sitemapEntries, null, 2));
     return sitemapEntries;
