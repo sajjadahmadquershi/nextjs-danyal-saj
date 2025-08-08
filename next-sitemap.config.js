@@ -34,7 +34,7 @@ module.exports = {
       loc: `${config.siteUrl}${path}`,
       changefreq: 'weekly',
       priority: 0.7,
-      lastmod: new Date().toISOString(),
+      lastmod: new Date().toISOString().replace(/\.\d+Z$/, 'Z'),
     };
   },
 
