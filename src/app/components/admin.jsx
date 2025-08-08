@@ -43,60 +43,60 @@ const AdminPortfolio = () => {
   };
 
   const fetchData = async () => {
-  setLoading(true);
-  try {
-    const [projectRes, siteRes, blogRes] = await Promise.all([
-      supabase
-        .from("portfolio_items")
-        .select("id, title, category, tag, image_url, web_link, display_order, created_at")
-        .order("display_order", { ascending: false })
-        .order("created_at", { ascending: false }),
+    setLoading(true);
+    try {
+      const [projectRes, siteRes, blogRes] = await Promise.all([
+        supabase
+          .from("portfolio_items")
+          .select("id, title, category, tag, image_url, web_link, display_order, created_at")
+          .order("display_order", { ascending: false })
+          .order("created_at", { ascending: false }),
 
-      supabase
-        .from("site_content")
-        .select("*"),
+        supabase
+          .from("site_content")
+          .select("*"),
 
-      // Add blog fetching
-      supabase
-        .from("blogs")
-        .select("id, title, slug, excerpt, thumbnail_url, published_at, tags, category, is_published, author")
-        .order("published_at", { ascending: false })
-    ]);
+        // Add blog fetching
+        supabase
+          .from("blogs")
+          .select("id, title, slug, excerpt, thumbnail_url, published_at, tags, category, is_published, author")
+          .order("published_at", { ascending: false })
+      ]);
 
-    const { data: projectData, error: projectError } = projectRes;
-    const { data: siteData, error: siteError } = siteRes;
-    const { data: blogData, error: blogError } = blogRes;
+      const { data: projectData, error: projectError } = projectRes;
+      const { data: siteData, error: siteError } = siteRes;
+      const { data: blogData, error: blogError } = blogRes;
 
-    if (projectError) {
-      console.error("Error fetching projects:", projectError);
-      alert("Failed to load projects.");
-      return;
+      if (projectError) {
+        console.error("Error fetching projects:", projectError);
+        alert("Failed to load projects.");
+        return;
+      }
+
+      if (blogError) {
+        console.error("Error fetching blogs:", blogError);
+        alert("Failed to load blogs.");
+      } else {
+        setBlogs(blogData || []);
+      }
+
+      setProjects(projectData || []);
+      const allTags = projectData ? projectData.flatMap((item) => item.tag || []) : [];
+      setTags(["All", ...new Set(allTags)]);
+
+      if (siteError) {
+        console.error("Error fetching site content:", siteError);
+        alert("Failed to load site content.");
+      } else {
+        setSiteContent(siteData || []);
+      }
+    } catch (err) {
+      console.error("Unexpected error fetching data:", err);
+      alert("Unexpected error loading data: " + err.message);
+    } finally {
+      setLoading(false);
     }
-
-    if (blogError) {
-      console.error("Error fetching blogs:", blogError);
-      alert("Failed to load blogs.");
-    } else {
-      setBlogs(blogData || []);
-    }
-
-    setProjects(projectData || []);
-    const allTags = projectData ? projectData.flatMap((item) => item.tag || []) : [];
-    setTags(["All", ...new Set(allTags)]);
-
-    if (siteError) {
-      console.error("Error fetching site content:", siteError);
-      alert("Failed to load site content.");
-    } else {
-      setSiteContent(siteData || []);
-    }
-  } catch (err) {
-    console.error("Unexpected error fetching data:", err);
-    alert("Unexpected error loading data: " + err.message);
-  } finally {
-    setLoading(false);
-  }
-};
+  };
 
   useEffect(() => {
     fetchData();
@@ -120,28 +120,30 @@ const AdminPortfolio = () => {
   //   });
   // }, [blogs, blogSearchInput]);
   const filteredBlogs = useMemo(() => {
-  let result = blogs;
+    let result = blogs;
 
-  if (blogSearchInput) {
-    const searchTerm = blogSearchInput.toLowerCase();
-    result = result.filter(blog => {
-      const titleMatch = blog.title?.toLowerCase().includes(searchTerm);
-      const excerptMatch = blog.excerpt?.toLowerCase().includes(searchTerm);
-      const tagMatch = Array.isArray(blog.tags) && blog.tags.some(tag => tag.toLowerCase().includes(searchTerm));
-      return titleMatch || excerptMatch || tagMatch;
-    });
-  }
+    if (blogSearchInput) {
+      const searchTerm = blogSearchInput.toLowerCase();
+      result = result.filter(blog => {
+        const titleMatch = blog.title?.toLowerCase().includes(searchTerm);
+        const excerptMatch = blog.excerpt?.toLowerCase().includes(searchTerm);
+        const tagMatch = Array.isArray(blog.tags) && blog.tags.some(tag => tag.toLowerCase().includes(searchTerm));
+        return titleMatch || excerptMatch || tagMatch;
+      });
+    }
 
-  if (blogFilter === 'published') {
-    result = result.filter(b => b.is_published);
-  } else if (blogFilter === 'draft') {
-    result = result.filter(b => !b.is_published);
-  } else if (blogFilter === 'cnc') {
-    result = result.filter(b => b.category === 'cnc');
-  }
+    if (blogFilter === 'published') {
+      result = result.filter(b => b.is_published);
+    } else if (blogFilter === 'draft') {
+      result = result.filter(b => !b.is_published);
+    } else if (blogFilter === 'cnc') {
+      result = result.filter(b => b.category === 'cnc');
+    } else if (blogFilter === 'webdev') {
+      result = result.filter(b => b.category === 'webdev');
+    }
 
-  return result;
-}, [blogs, blogSearchInput, blogFilter]);
+    return result;
+  }, [blogs, blogSearchInput, blogFilter]);
 
 
   const compressAndResizeImage = async (file) => {
@@ -703,54 +705,47 @@ const AdminPortfolio = () => {
           {!loading && blogs.length > 0 && (
             <div className="bg-[#2c2c2c] rounded-lg p-4 mb-6">
               <h4 className="text-white font-semibold mb-2">Blog Statistics</h4>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
-                {/* <div>
+              <div className="grid grid-cols-2 md:grid-cols-5 gap-4 text-center">
+
+                <div
+                  className="cursor-pointer hover:bg-gray-700 rounded p-2"
+                  onClick={() => setBlogFilter(null)}
+                >
                   <p className="text-2xl font-bold text-blue-400">{blogs.length}</p>
                   <p className="text-sm text-gray-400">Total Blogs</p>
                 </div>
-                <div>
+
+                <div
+                  className="cursor-pointer hover:bg-gray-700 rounded p-2"
+                  onClick={() => setBlogFilter('published')}
+                >
                   <p className="text-2xl font-bold text-green-400">{blogs.filter(b => b.is_published).length}</p>
                   <p className="text-sm text-gray-400">Published</p>
                 </div>
-                <div>
+
+                <div
+                  className="cursor-pointer hover:bg-gray-700 rounded p-2"
+                  onClick={() => setBlogFilter('draft')}
+                >
                   <p className="text-2xl font-bold text-yellow-400">{blogs.filter(b => !b.is_published).length}</p>
                   <p className="text-sm text-gray-400">Drafts</p>
                 </div>
-                <div onClick={() => setBlogFilter('cnc')} className="cursor-pointer">
+
+                <div
+                  className="cursor-pointer hover:bg-gray-700 rounded p-2"
+                  onClick={() => setBlogFilter('cnc')}
+                >
                   <p className="text-2xl font-bold text-purple-400">{blogs.filter(b => b.category === 'cnc').length}</p>
                   <p className="text-sm text-gray-400">CNC Blogs</p>
-                </div> */}
-                <div
-    className="cursor-pointer hover:bg-gray-700 rounded p-2"
-    onClick={() => setBlogFilter(null)}
-  >
-    <p className="text-2xl font-bold text-blue-400">{blogs.length}</p>
-    <p className="text-sm text-gray-400">Total Blogs</p>
-  </div>
+                </div>
 
-  <div
-    className="cursor-pointer hover:bg-gray-700 rounded p-2"
-    onClick={() => setBlogFilter('published')}
-  >
-    <p className="text-2xl font-bold text-green-400">{blogs.filter(b => b.is_published).length}</p>
-    <p className="text-sm text-gray-400">Published</p>
-  </div>
-
-  <div
-    className="cursor-pointer hover:bg-gray-700 rounded p-2"
-    onClick={() => setBlogFilter('draft')}
-  >
-    <p className="text-2xl font-bold text-yellow-400">{blogs.filter(b => !b.is_published).length}</p>
-    <p className="text-sm text-gray-400">Drafts</p>
-  </div>
-
-  <div
-    className="cursor-pointer hover:bg-gray-700 rounded p-2"
-    onClick={() => setBlogFilter('cnc')}
-  >
-    <p className="text-2xl font-bold text-purple-400">{blogs.filter(b => b.category === 'cnc').length}</p>
-    <p className="text-sm text-gray-400">CNC Blogs</p>
-  </div>
+                 <div
+                  className="cursor-pointer hover:bg-gray-700 rounded p-2"
+                  onClick={() => setBlogFilter('webdev')}
+                >
+                  <p className="text-2xl font-bold text-pink-400">{blogs.filter(b => b.category === 'webdev').length}</p>
+                  <p className="text-sm text-gray-400">Web Blogs</p>
+                </div>
               </div>
             </div>
           )}

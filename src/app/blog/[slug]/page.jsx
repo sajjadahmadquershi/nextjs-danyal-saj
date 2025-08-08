@@ -20,23 +20,34 @@ export async function generateMetadata({ params }) {
     return {
       title: "Blog not found | Sajjad CNC",
       description: "This blog post was not found.",
-
     };
-
   }
+
+  // ✅ Extract real image URL if optimized version is provided
+  const getOGImageUrl = (url) => {
+    try {
+      const parsed = new URL(url);
+      const original = parsed.searchParams.get("url");
+      return original ? decodeURIComponent(original) : url;
+    } catch {
+      return url;
+    }
+  };
+
+  const imageUrl = getOGImageUrl(blog.thumbnail_url || "https://unisol-sajjad.vercel.app/images/cnc-laser-2d-design.png");
 
   return {
     title: blog.title,
     description: blog.excerpt,
     icons: {
-      icon: "/sajjad-2d-3d-cnc-dxf-svg.svg", // ✅ your favicon path
+      icon: "/sajjad-2d-3d-cnc-dxf-svg.svg",
     },
     openGraph: {
       title: blog.title,
       description: blog.excerpt,
       images: [
         {
-          url: blog.thumbnail_url || "https://unisol-sajjad.vercel.app/images/cnc-laser-2d-design.png",
+          url: imageUrl,
           width: 1200,
           height: 630,
           alt: blog.title,
@@ -47,10 +58,11 @@ export async function generateMetadata({ params }) {
       card: "summary_large_image",
       title: blog.title,
       description: blog.excerpt,
-      images: [blog.thumbnail_url || "https://unisol-sajjad.vercel.app/images/cnc-laser-2d-design.png"],
+      images: [imageUrl],
     },
   };
 }
+
 
 export default async function BlogDetail({ params }) {
   const supabase = createServerComponentClient({ cookies }); // ✅ cookies passed here
