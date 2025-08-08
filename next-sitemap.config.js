@@ -64,9 +64,9 @@ module.exports = {
         console.error('❌ Supabase error:', error);
         // فال بیک ڈیٹا
         blogPaths = [
-          { slug: 'how-to-start-cnc-laser-cutting', updated_at: '2025-07-10T12:59:58.031276' },
-          { slug: 'getting-started-cnc-2d-3d-design', updated_at: '2025-07-10T17:28:02.581019' },
-        ];
+  { slug: 'how-to-start-cnc-laser-cutting', updated_at: '2025-07-10T12:59:58Z' },
+  { slug: 'getting-started-cnc-2d-3d-design', updated_at: '2025-07-10T17:28:02Z' },
+];
       } else {
         blogPaths = blogs || [];
 
