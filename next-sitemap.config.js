@@ -10,7 +10,7 @@ module.exports = {
 
   exclude: [
     '/admin',
-    '/admin/dashboard', 
+    '/admin/dashboard',
     '/admin/blog',
     '/blog/add',
     '/404',
@@ -41,7 +41,7 @@ module.exports = {
   additionalPaths: async (config) => {
     const staticPages = [
       { path: '/', priority: 0.9 },
-      { path: '/web', priority: 0.7 },
+      { path: '/web', priority: 0.9 },
       { path: '/blog/blog-cnc', priority: 0.7 },
       { path: '/blog/blog-web', priority: 0.7 },
     ];
@@ -54,7 +54,7 @@ module.exports = {
         process.env.NEXT_PUBLIC_SUPABASE_URL,
         process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
       );
-    
+
 
       const { data: blogs, error } = await supabase
         .from('blogs')
@@ -69,7 +69,7 @@ module.exports = {
         ];
       } else {
         blogPaths = blogs || [];
-      
+
       }
 
       if (!Array.isArray(blogPaths)) {
@@ -79,16 +79,16 @@ module.exports = {
 
       // لاگنگ کے ساتھ لوپ
       blogPaths.forEach((blog, index) => {
-      
+
       });
     } catch (error) {
       //console.error('❌ Error fetching blog paths from Supabase:', error.message);
       // فال بیک ڈیٹا
       blogPaths = [
         { slug: 'how-to-start-cnc-laser-cutting', updated_at: '2025-07-10T12:59:58.031276' },
-        
+
       ];
-   
+
     }
 
     const sitemapEntries = [
@@ -103,7 +103,9 @@ module.exports = {
           loc: `${config.siteUrl}/blog/${blog.slug}`,
           changefreq: 'monthly',
           priority: 0.9,
-          lastmod: blog.updated_at || new Date().toISOString(),
+          lastmod: blog.updated_at
+            ? new Date(blog.updated_at).toISOString().split('.')[0] + 'Z'
+            : new Date().toISOString().split('.')[0] + 'Z',
         };
         return entry;
       }),
