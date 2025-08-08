@@ -96,16 +96,16 @@ module.exports = {
         loc: `${config.siteUrl}${path}`,
         changefreq: 'weekly',
         priority,
-        lastmod: new Date().toISOString(),
+        lastmod: new Date().toISOString().replace(/\.\d+Z$/, 'Z'),
       })),
       ...blogPaths.map((blog) => {
         const entry = {
           loc: `${config.siteUrl}/blog/${blog.slug}`,
           changefreq: 'monthly',
           priority: 0.9,
-          lastmod: blog.updated_at
-            ? new Date(blog.updated_at).toISOString().split('.')[0] + 'Z'
-            : new Date().toISOString().split('.')[0] + 'Z',
+  lastmod: blog.updated_at
+  ? new Date(blog.updated_at).toISOString().replace(/\.\d+Z$/, 'Z')
+  : new Date().toISOString().replace(/\.\d+Z$/, 'Z')
         };
         return entry;
       }),
