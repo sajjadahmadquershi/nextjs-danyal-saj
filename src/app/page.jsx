@@ -12,7 +12,7 @@ export const metadata = {
   metadataBase: new URL("https://unisol-sajjad.vercel.app"), // 🔁 Update this to your actual domain
 
   title: {
-    default: "Sajjad's CNC Blog",
+    default: "Sajjad's CNC Design Portfolio",
     template: "%s | Sajjad CNC",
   },
   description: "Explore CNC design tutorials, industry tips, and creative insights by Sajjad. Stay updated with the latest trends in 2D and 3D CNC work.",
