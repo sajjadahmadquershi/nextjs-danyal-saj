@@ -1,0 +1,260 @@
+@import "tailwindcss";
+
+:root {
+  --color-primary: 83, 127, 231; /* colora2 (blue) */
+  --color-secondary: 255, 229, 55; /* colora (yellow) */
+}
+
+/* optional dark mode */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-primary: 173, 216, 230; /* light blue fallback */
+    --color-secondary: 255, 182, 193; /* light pink fallback */
+  }
+}
+
+.nextjs-toast-errors-parent {
+  display: flex !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: white;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  z-index: 9999;
+}
+
+:root{
+  --ff: "Montserrat", sans-serif;
+  --colorp: #f9f9f9;
+  --colorp2: #fff;
+  --colora: #ffe537;
+  --colora2: #537fe7;
+  --colorbody: #1e1e1e;
+  --colors: #333;
+  --h1: bold 54px/60px var(--ff);
+  --h2: bold 36px/48px var(--ff);
+  --h3: bold 24px/36px var(--ff);
+  --links: 18px/18px var(--ff);
+  --p: 18px/30px var(--ff);
+  --p1: 24px/30px var(--ff);
+  --p2: 36px/48px var(--ff);
+  --subtext: 12px/20px var(--ff);
+  --transition: 0.3s ease-in-out;
+}
+
+/* Default white text for the entire project */
+@layer base {
+  html {
+    color: white;
+  }
+
+  body {
+    color: white;
+    background-color: #0a0a0a;
+  }
+}
+
+/* Override specific elements that should not be white */
+input, textarea, select {
+  color: #1f2937; /* Dark text for form inputs */
+  background-color: white;
+}
+
+/* Ensure links are visible (but preserve navbar link styling) */
+a:not(nav a):not([class*="nav"]) {
+  color: #fbbf24; /* Amber color for links */
+}
+
+a:not(nav a):not([class*="nav"]):hover {
+  color: #f59e0b; /* Darker amber on hover */
+}
+
+/* Ensure text remains readable on light backgrounds */
+.bg-white, .bg-light {
+  color: #1f2937 !important;
+}
+
+/* For better contrast on various backgrounds */
+.text-dark-bg {
+  color: white;
+}
+
+.text-light-bg {
+  color: #1f2937;
+}
+
+/* Preserve navbar styling - prevent global styles from affecting it */
+nav, nav *, [class*="nav"], [class*="Nav"] {
+  color: inherit !important;
+}
+
+/* Keep your existing animations */
+.heartbeat {
+	-webkit-animation: heartbeat 1.5s ease-in-out infinite both;
+	        animation: heartbeat 1.5s ease-in-out infinite both;
+}
+
+@-webkit-keyframes heartbeat {
+  from {
+    -webkit-transform: scale(1);
+            transform: scale(1);
+    -webkit-transform-origin: center center;
+            transform-origin: center center;
+    -webkit-animation-timing-function: ease-out;
+            animation-timing-function: ease-out;
+  }
+  10% {
+    -webkit-transform: scale(0.91);
+            transform: scale(0.91);
+    -webkit-animation-timing-function: ease-in;
+            animation-timing-function: ease-in;
+  }
+  17% {
+    -webkit-transform: scale(0.98);
+            transform: scale(0.98);
+    -webkit-animation-timing-function: ease-out;
+            animation-timing-function: ease-out;
+  }
+  33% {
+    -webkit-transform: scale(0.87);
+            transform: scale(0.87);
+    -webkit-animation-timing-function: ease-in;
+            animation-timing-function: ease-in;
+  }
+  45% {
+    -webkit-transform: scale(1);
+            transform: scale(1);
+    -webkit-animation-timing-function: ease-out;
+            animation-timing-function: ease-out;
+  }
+}
+@keyframes heartbeat {
+  from {
+    -webkit-transform: scale(1);
+            transform: scale(1);
+    -webkit-transform-origin: center center;
+            transform-origin: center center;
+    -webkit-animation-timing-function: ease-out;
+            animation-timing-function: ease-out;
+  }
+  10% {
+    -webkit-transform: scale(0.91);
+            transform: scale(0.91);
+    -webkit-animation-timing-function: ease-in;
+            animation-timing-function: ease-in;
+  }
+  17% {
+    -webkit-transform: scale(0.98);
+            transform: scale(0.98);
+    -webkit-animation-timing-function: ease-out;
+            animation-timing-function: ease-out;
+  }
+  33% {
+    -webkit-transform: scale(0.87);
+            transform: scale(0.87);
+    -webkit-animation-timing-function: ease-in;
+            animation-timing-function: ease-in;
+  }
+  45% {
+    -webkit-transform: scale(1);
+            transform: scale(1);
+    -webkit-animation-timing-function: ease-out;
+            animation-timing-function: ease-out;
+  }
+}
+
+.scale-up-hor-center {
+	-webkit-animation: scale-up-hor-center 0.4s cubic-bezier(0.390, 0.575, 0.565, 1.000) both;
+	        animation: scale-up-hor-center 0.4s cubic-bezier(0.390, 0.575, 0.565, 1.000) both;
+}
+
+@-webkit-keyframes scale-up-hor-center {
+  0% {
+    -webkit-transform: scaleX(0.4);
+            transform: scaleX(0.4);
+  }
+  100% {
+    -webkit-transform: scaleX(1);
+            transform: scaleX(1);
+  }
+}
+@keyframes scale-up-hor-center {
+  0% {
+    -webkit-transform: scaleX(0.4);
+            transform: scaleX(0.4);
+  }
+  100% {
+    -webkit-transform: scaleX(1);
+            transform: scaleX(1);
+  }
+}
+
+.shake-horizontal {
+	-webkit-animation: shake-horizontal 15s linear 2s infinite both;
+	        animation: shake-horizontal 15s linear 2s infinite both;
+}
+
+@-webkit-keyframes shake-horizontal {
+  0%,
+  100% {
+    -webkit-transform: translateX(0);
+            transform: translateX(0);
+  }
+  10%,
+  30%,
+  50%,
+  70% {
+    -webkit-transform: translateX(-10px);
+            transform: translateX(-10px);
+  }
+  20%,
+  40%,
+  60% {
+    -webkit-transform: translateX(10px);
+            transform: translateX(10px);
+  }
+  80% {
+    -webkit-transform: translateX(8px);
+            transform: translateX(8px);
+  }
+  90% {
+    -webkit-transform: translateX(-8px);
+            transform: translateX(-8px);
+  }
+}
+@keyframes shake-horizontal {
+  0%,
+  100% {
+    -webkit-transform: translateX(0);
+            transform: translateX(0);
+  }
+  10%,
+  30%,
+  50%,
+  70% {
+    -webkit-transform: translateX(-10px);
+            transform: translateX(-10px);
+  }
+  20%,
+  40%,
+  60% {
+    -webkit-transform: translateX(10px);
+            transform: translateX(10px);
+  }
+  80% {
+    -webkit-transform: translateX(8px);
+            transform: translateX(8px);
+  }
+  90% {
+    -webkit-transform: translateX(-8px);
+            transform: translateX(-8px);
+  }
+}
+
+iframe {
+  width: -webkit-fill-available;
+}

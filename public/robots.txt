@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://unisol-sajjad.vercel.app
+
+# Sitemaps
+Sitemap: https://unisol-sajjad.vercel.app/sitemap.xml
