@@ -110,7 +110,7 @@ const AboutSection = ({ aboutvideo }) => {
         {/* Video and About Us Section - Side by Side */}
         <div className="grid lg:grid-cols-2 gap-12 items-center mb-12">
           {/* Video Section */}
-          <div className="relative group">
+          {/* <div className="relative group">
             <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl blur opacity-20 group-hover:opacity-30 transition-opacity duration-300"></div>
             <div className="relative bg-white dark:bg-slate-800 rounded-xl p-1 shadow-xl">
               {selectedVideo ? (
@@ -133,7 +133,48 @@ const AboutSection = ({ aboutvideo }) => {
                 </div>
               )}
             </div>
+          </div> */}
+          <div className="relative group">
+            <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl blur opacity-20 group-hover:opacity-30 transition-opacity duration-300"></div>
+
+            <div className="relative bg-white dark:bg-slate-800 rounded-xl p-1 shadow-xl">
+
+              {!selectedVideo ? (
+                // Nothing selected
+                <div className="flex items-center justify-center h-64 bg-slate-100 dark:bg-slate-700 rounded-lg">
+                  <p className="text-red-500 font-medium">File not available</p>
+                </div>
+              ) : selectedVideo.match(/\.(mp4|webm|mov|mkv)$/i) ? (
+                // Video Preview
+                <video
+                  className="w-full rounded-lg shadow-lg"
+                  width="500"
+                  height="315"
+                  src={selectedVideo}
+                  controls
+                  muted
+                  loop
+                  controlsList="nodownload"
+                >
+                  Your browser does not support the video tag.
+                </video>
+              ) : selectedVideo.match(/\.(jpg|jpeg|png|webp|svg)$/i) ? (
+                // Image Preview
+                <img
+                  className="w-full rounded-lg shadow-lg"
+                  src={selectedVideo}
+                  alt="Preview"
+                />
+              ) : (
+                // Unsupported file type
+                <div className="flex items-center justify-center h-64 bg-slate-100 dark:bg-slate-700 rounded-lg">
+                  <p className="text-red-500 font-medium">Unsupported file type</p>
+                </div>
+              )}
+
+            </div>
           </div>
+
 
           {/* About Us Content */}
           <div className="space-y-6">
@@ -159,7 +200,7 @@ const AboutSection = ({ aboutvideo }) => {
                   onClick={() => handleTabChange(id)}
                   className="cursor-pointer"
                 >
-                  <TabButton selectTab={() => {}} active={tab === id}>
+                  <TabButton selectTab={() => { }} active={tab === id}>
                     {id === "skills"
                       ? "We Use"
                       : id.charAt(0).toUpperCase() + id.slice(1)}

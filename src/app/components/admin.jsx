@@ -283,68 +283,88 @@ const AdminPortfolio = () => {
     setIsSubmitting(false);
   };
 
-  const handleFileUpload = async (file, column) => {
-    const need = window.confirm(`Are you sure you want to update the ${column} file?`);
-    if (!need || !file) return;
+const handleFileUpload = async (file, column) => {
+  const need = window.confirm(`Are you sure you want to update the ${column} file?`);
+  if (!need || !file) return;
 
-    const fileExt = file.name.split(".").pop();
-    const fileName = `${Date.now()}.${fileExt}`;
-    const filePath = `portfolio/${fileName}`;
+  const originalExt = file.name.split(".").pop().toLowerCase();
+  const imageTypes = ["jpg", "jpeg", "png", "webp"];
 
-    const row = siteContent[0];
-    const rowId = row?.id;
+  let uploadFile = file;
+  let finalExt = originalExt;
 
-    if (!rowId) {
-      alert("No row found in site_content. Please add site content first.");
-      return;
+  // --------------------------------------------------------
+  // 🟢 STEP 1 — Compress only image & set ext = webp
+  // --------------------------------------------------------
+  if (imageTypes.includes(originalExt)) {
+    try {
+      uploadFile = await compressAndResizeImage(file);
+
+      // compressed file name is already something like  123123.webp
+      finalExt = "webp";  
+
+    } catch (err) {
+      console.error("Compression failed:", err);
     }
+  }
 
-    const oldUrl = row?.[column];
-    if (oldUrl) {
-      const parts = oldUrl.split("/");
-      const index = parts.findIndex((part) => part === "portfolio-assets") + 1;
-      const oldFilePath = parts.slice(index).join("/");
+  // final file name MUST use compressed extension
+  const fileName = `${Date.now()}.${finalExt}`;
+  const filePath = `portfolio/${fileName}`;
 
-      const { error: deleteError } = await supabase.storage
-        .from("portfolio-assets")
-        .remove([oldFilePath]);
+  // --------------------------------------------------------
+  // 🟡 STEP 2 — Remove old file
+  // --------------------------------------------------------
+  const row = siteContent[0];
+  const rowId = row?.id;
 
-      if (deleteError) {
-        alert("Error deleting old file: " + deleteError.message);
-        return;
-      }
-    }
+  if (!rowId) {
+    alert("No row found in site_content. Please add site content first.");
+    return;
+  }
 
-    const { error: uploadError } = await supabase.storage
-      .from("portfolio-assets")
-      .upload(filePath, file, {
-        cacheControl: "public, max-age=31536000, immutable",
-        upsert: true,
-      });
+  const oldUrl = row?.[column];
+  if (oldUrl) {
+    const parts = oldUrl.split("/");
+    const index = parts.findIndex((part) => part === "portfolio-assets") + 1;
+    const oldFilePath = parts.slice(index).join("/");
 
-    if (uploadError) {
-      alert("Error uploading new file: " + uploadError.message);
-      return;
-    }
+    await supabase.storage.from("portfolio-assets").remove([oldFilePath]);
+  }
 
-    const { data: publicUrlData } = supabase.storage
-      .from("portfolio-assets")
-      .getPublicUrl(filePath);
+  // --------------------------------------------------------
+  // 🔵 STEP 3 — Upload new file
+  // --------------------------------------------------------
+  const { error: uploadError } = await supabase.storage
+    .from("portfolio-assets")
+    .upload(filePath, uploadFile, {
+      cacheControl: "public, max-age=31536000, immutable",
+      upsert: true,
+    });
 
-    const publicURL = publicUrlData.publicUrl;
+  if (uploadError) {
+    alert("Upload Error: " + uploadError.message);
+    return;
+  }
 
-    const { error: updateError } = await supabase
-      .from("site_content")
-      .update({ [column]: publicURL })
-      .eq("id", rowId);
+  // --------------------------------------------------------
+  // 🔵 STEP 4 — Update DB
+  // --------------------------------------------------------
+  const { data: publicUrlData } = supabase.storage
+    .from("portfolio-assets")
+    .getPublicUrl(filePath);
 
-    if (updateError) {
-      alert(`Error updating ${column}: ` + updateError.message);
-    } else {
-      alert(`${column} updated successfully!`);
-      await fetchData();
-    }
-  };
+  const publicURL = publicUrlData.publicUrl;
+
+  await supabase
+    .from("site_content")
+    .update({ [column]: publicURL })
+    .eq("id", rowId);
+
+  alert(`${column} updated successfully!`);
+  await fetchData();
+};
+
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
